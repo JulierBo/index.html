@@ -1,0 +1,878 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLBB စိန်များ ဝယ်ယူရန်</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --accent: #e74c3c;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --warning: #f39c12;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            min-height: 100vh;
+            padding-bottom: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+        }
+        
+        .hero {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+        }
+        
+        .hero h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 20px;
+        }
+        
+        .product-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+            margin-bottom: 25px;
+            height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: #ffcc00;
+        }
+        
+        .product-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+        
+        .product-desc {
+            margin-bottom: 15px;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+        
+        .product-price {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .buy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        
+        .buy-btn:hover {
+            background: #2980b9;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            width: 90%;
+            max-width: 500px;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+        }
+        
+        .form-group input::placeholder, .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .submit-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            font-size: 16px;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .submit-btn:hover {
+            background: #27ae60;
+        }
+        
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .payment-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .payment-option img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+        
+        .copy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .success-message {
+            text-align: center;
+            padding: 20px;
+            background: rgba(46, 204, 113, 0.2);
+            border-radius: 10px;
+            margin: 20px 0;
+            color: white;
+        }
+        
+        .success-icon {
+            font-size: 50px;
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+        
+        .selected-product {
+            background: rgba(46, 204, 113, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .order-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .custom-order-form {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        
+        .price-preview {
+            background: rgba(46, 204, 113, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+        }
+        
+        .error-message {
+            color: var(--accent);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background: rgba(44, 62, 80, 0.95);
+            transition: all 0.3s ease;
+            z-index: 1001;
+            backdrop-filter: blur(10px);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .sidebar.active {
+            left: 0;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .sidebar-item {
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .sidebar-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-item.active {
+            background: rgba(46, 204, 113, 0.2);
+            color: var(--secondary);
+        }
+        
+        .sidebar-item i {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+        
+        @media (max-width: 1024px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+    
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>MLBB စိန်များ</h2>
+        </div>
+        <div class="sidebar-menu">
+            <div class="sidebar-item active" data-page="homePage">
+                <i class="fas fa-home"></i>
+                <span>ပင်မစာမျက်နှာ</span>
+            </div>
+            <div class="sidebar-item" data-page="orderPage">
+                <i class="fas fa-history"></i>
+                <span>Order History</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <header>
+                <h2>MLBB စိန်များ</h2>
+            </div>
+            
+            <button class="submit-btn" id="menuBtn">
+                <i class="fas fa-bars"></i> မီနူး
+            </button>
+        </header>
+        
+        <!-- Home Page -->
+        <div class="page active" id="homePage">
+            <div class="hero">
+                <h1>Mobile Legends စိန်များ ဝယ်ယူရန်</h1>
+                <p>မြန်ဆန်စွာနှင့် စိတ်ချရသော စိန်ဝယ်ယူမှု ဝန်ဆောင်မှု</p>
+            </div>
+            
+            <!-- Payment Options -->
+            <div class="custom-order-form">
+                <h2 style="text-align: center; margin-bottom: 20px;">ငွေပေးချေရန်</h2>
+                
+                <div class="payment-option">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2331/2331966.png" alt="Wave Money">
+                    <div>
+                        <h3>Wave Money - Nine Nine</h3>
+                        <p>၀၉၆၇၃၅၈၅၄၈၀</p>
+                        <button class="copy-btn" onclick="copyPhoneNumber('09673585480')">နံပါတ်ကိုကူးယူရန်</button>
+                    </div>
+                </div>
+                
+                <div class="payment-option">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2331/2331966.png" alt="KPay">
+                    <div>
+                        <h3>KPay - Ma May Phoo Wai</h3>
+                        <p>၀၉၆၇၈၇၈၆၅၂၈</p>
+                        <button class="copy-btn" onclick="copyPhoneNumber('09678786528')">နံပါတ်ကိုကူးယူရန်</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Custom Order Form -->
+            <div class="custom-order-form">
+                <h2 style="text-align: center; margin-bottom: 20px;">စိန်အမျိုးအစား ရွေးချယ်ဝယ်ယူရန်</h2>
+                
+                <div class="form-group">
+                    <label for="productType">စိန်အမျိုးအစား</label>
+                    <select id="productType">
+                        <option value="weekly">Weekly Pass</option>
+                        <option value="normal">Normal Diamond</option>
+                        <option value="2x">2X Diamond</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="gameIdCustom">ဂိမ်း ID</label>
+                    <input type="text" id="gameIdCustom" placeholder="သင့်ဂိမ်း ID ထည့်ပါ" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="serverIdCustom">ဆာဗာ ID</label>
+                    <input type="text" id="serverIdCustom" placeholder="သင့်ဆာဗာ ID ထည့်ပါ" required>
+                </div>
+                
+                <div class="form-group" id="amountGroup">
+                    <label for="amount">စိန်အရေအတွက်</label>
+                    <input type="number" id="amount" min="1" value="1" required>
+                    <div class="error-message" id="amountError">ကျေးဇူးပြု၍ မှန်ကန်သော စိန်အရေအတွက်ကို ထည့်သွင်းပါ။</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="paymentScreenshot">ငွေလွှဲ Screenshot</label>
+                    <input type="file" id="paymentScreenshot" accept="image/*" required>
+                </div>
+                
+                <div class="price-preview" id="pricePreview">
+                    <h3>စုစုပေါင်းကျသင့်ငွေ: <span id="totalPrice">၆၀၀၀</span> ကျပ်</h3>
+                </div>
+                
+                <button class="submit-btn" id="customOrderBtn">မှာယူမည်</button>
+            </div>
+        </div>
+        
+        <!-- Order Page -->
+        <div class="page" id="orderPage">
+            <div class="hero">
+                <h1>Order History</h1>
+                <p>သင့်ရဲ့ မှာယူမှုမှတ်တမ်းများ</p>
+            </div>
+            
+            <div id="ordersContainer">
+                <p style="text-align: center;">မှာယူမှုများ မရှိသေးပါ။</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Success Message -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="success-message">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2>မှာယူမှု အောင်မြင်ပါသည်!</h2>
+                <p>သင့်အော်ဒါကို အောင်မြင်စွာ တင်ပြီးပါပြီ။ Admin မှ စစ်ဆေးနေပါသည်။</p>
+                <button class="submit-btn" id="closeSuccessModal">အိုကေ</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const menuBtn = document.getElementById('menuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const productType = document.getElementById('productType');
+        const amountInput = document.getElementById('amount');
+        const amountError = document.getElementById('amountError');
+        const totalPriceElement = document.getElementById('totalPrice');
+        const customOrderBtn = document.getElementById('customOrderBtn');
+        const ordersContainer = document.getElementById('ordersContainer');
+        const sidebarItems = document.querySelectorAll('.sidebar-item');
+        const pages = document.querySelectorAll('.page');
+        const closeSuccessModal = document.getElementById('closeSuccessModal');
+        const successModal = document.getElementById('successModal');
+        const gameIdInput = document.getElementById('gameIdCustom');
+        const serverIdInput = document.getElementById('serverIdCustom');
+        const screenshotInput = document.getElementById('paymentScreenshot');
+        
+        // Orders data
+        let orders = [];
+        let orderCounter = 1;
+        
+        // Valid amounts for each product type
+        const validAmounts = {
+            'weekly': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            'normal': [11, 22, 33, 44, 56, 86, 122, 172],
+            '2x': [50, 150, 250, 500]
+        };
+        
+        // Prices for specific amounts
+        const specialPrices = {
+            '11': 950,
+            '22': 1900,
+            '86': 5100,
+            '122': 9200,
+            '172': 15000,
+            '50': 3500,
+            '150': 9200,
+            '250': 15000,
+            '500': 33000
+        };
+        
+        // Telegram bot configuration
+        const TELEGRAM_BOT_TOKEN = '8206207299:AAE5RjQd1S2JwhEcvmRChPAJ9T7sZznLo8E';
+        const TELEGRAM_GROUP_ID = '-1003095622756';
+        
+        // Initialize the page
+        function initPage() {
+            updateOrdersDisplay();
+            updatePricePreview();
+            setupEventListeners();
+        }
+        
+        // Setup event listeners
+        function setupEventListeners() {
+            // Menu button
+            menuBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+            });
+            
+            // Overlay click
+            overlay.addEventListener('click', () => {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+            
+            // Navigation
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    const pageId = item.getAttribute('data-page');
+                    
+                    // Update active nav item
+                    sidebarItems.forEach(navItem => navItem.classList.remove('active'));
+                    item.classList.add('active');
+                    
+                    // Show selected page
+                    pages.forEach(page => page.classList.remove('active'));
+                    document.getElementById(pageId).classList.add('active');
+                    
+                    // Close sidebar
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                });
+            });
+            
+            // Product type and amount change
+            productType.addEventListener('change', updatePricePreview);
+            amountInput.addEventListener('input', updatePricePreview);
+            
+            // Custom order button
+            customOrderBtn.addEventListener('click', placeOrder);
+            
+            // Close success modal
+            closeSuccessModal.addEventListener('click', () => {
+                successModal.style.display = 'none';
+            });
+        }
+        
+        // Update orders display
+        function updateOrdersDisplay() {
+            ordersContainer.innerHTML = '';
+            
+            if (orders.length === 0) {
+                ordersContainer.innerHTML = '<p style="text-align: center;">မှာယူမှုများ မရှိသေးပါ။</p>';
+                return;
+            }
+            
+            orders.forEach(order => {
+                const orderItem = document.createElement('div');
+                orderItem.className = 'order-item';
+                
+                orderItem.innerHTML = `
+                    <h3>Order ID: ${order.id}</h3>
+                    <p>ကုန်ပစ္စည်း: ${order.product}</p>
+                    <p>ဂိမ်း ID: ${order.gameId}</p>
+                    <p>ဆာဗာ ID: ${order.serverId}</p>
+                    <p>စျေးနှုန်း: ${formatCurrency(order.price)} ကျပ်</p>
+                    <p class="product-price">${order.date}</p>
+                `;
+                
+                ordersContainer.appendChild(orderItem);
+            });
+        }
+        
+        // Update price preview
+        function updatePricePreview() {
+            const selectedType = productType.value;
+            const amount = parseInt(amountInput.value) || 1;
+            
+            // Validate amount
+            validateAmount(selectedType, amount);
+            
+            let price = calculatePrice(selectedType, amount);
+            
+            totalPriceElement.textContent = formatCurrency(price);
+        }
+        
+        // Calculate price based on type and amount
+        function calculatePrice(type, amount) {
+            // Check if there's a special price for this amount
+            if (specialPrices[amount]) {
+                return specialPrices[amount];
+            }
+            
+            // Calculate based on type
+            switch(type) {
+                case 'weekly':
+                    return amount * 6000;
+                case 'normal':
+                    return amount * 100;
+                case '2x':
+                    return amount * 70;
+                default:
+                    return 0;
+            }
+        }
+        
+        // Validate amount
+        function validateAmount(type, amount) {
+            if (validAmounts[type].includes(amount)) {
+                amountError.style.display = 'none';
+                return true;
+            } else {
+                amountError.style.display = 'block';
+                return false;
+            }
+        }
+        
+        // Place order
+        function placeOrder() {
+            const selectedType = productType.value;
+            const gameId = gameIdInput.value;
+            const serverId = serverIdInput.value;
+            const amount = parseInt(amountInput.value) || 1;
+            const screenshot = screenshotInput.files[0];
+            
+            if (!gameId) {
+                alert('ကျေးဇူးပြု၍ ဂိမ်း ID ထည့်သွင်းပါ။');
+                gameIdInput.focus();
+                return;
+            }
+            
+            if (!serverId) {
+                alert('ကျေးဇူးပြု၍ ဆာဗာ ID ထည့်သွင်းပါ။');
+                serverIdInput.focus();
+                return;
+            }
+            
+            if (!screenshot) {
+                alert('ကျေးဇူးပြု၍ ငွေလွှဲ Screenshot ထည့်သွင်းပါ။');
+                screenshotInput.focus();
+                return;
+            }
+            
+            // Validate amount
+            if (!validateAmount(selectedType, amount)) {
+                alert('ကျေးဇူးပြု၍ မှန်ကန်သော စိန်အရေအတွက်ကို ထည့်သွင်းပါ။');
+                amountInput.focus();
+                return;
+            }
+            
+            let productName = '';
+            let price = calculatePrice(selectedType, amount);
+            
+            switch(selectedType) {
+                case 'weekly':
+                    productName = `Weekly Pass ${amount} ခု`;
+                    break;
+                case 'normal':
+                    productName = `Normal Diamond ${amount} ခု`;
+                    break;
+                case '2x':
+                    productName = `2X Diamond ${amount} ခု`;
+                    break;
+            }
+            
+            // Get current date and time
+            const now = new Date();
+            const dateTime = formatDateTime(now);
+            
+            // Add to orders
+            const newOrder = {
+                id: orderCounter++,
+                product: productName,
+                gameId: gameId,
+                serverId: serverId,
+                price: price,
+                date: dateTime
+            };
+            
+            orders.unshift(newOrder);
+            updateOrdersDisplay();
+            
+            // Prepare order data for Telegram
+            const orderData = {
+                product: productName,
+                price: price,
+                amount: amount,
+                gameId: gameId,
+                serverId: serverId,
+                dateTime: dateTime,
+                orderId: newOrder.id
+            };
+            
+            // Send to Telegram
+            sendToTelegram(orderData, screenshot);
+            
+            successModal.style.display = 'flex';
+            
+            // Reset form
+            gameIdInput.value = '';
+            serverIdInput.value = '';
+            amountInput.value = '1';
+            screenshotInput.value = '';
+            updatePricePreview();
+        }
+        
+        // Copy phone number function
+        function copyPhoneNumber(number) {
+            navigator.clipboard.writeText(number).then(() => {
+                alert('ဖုန်းနံပါတ် ကူးယူပြီးပါပြီ: ' + number);
+            }).catch(err => {
+                console.error('Error copying text: ', err);
+                alert('ဖုန်းနံပါတ် ကူးယူရာတွင် အမှားတစ်ခုဖြစ်နေပါသည်။');
+            });
+        }
+        
+        // Send data to Telegram
+        function sendToTelegram(data, screenshotFile) {
+            let message = `🛒 အမှာစာအသစ်\n\n`;
+            message += `🆔 အော်ဒါနံပါတ်: ${data.orderId}\n`;
+            message += `🎮 ဂိမ်း ID: ${data.gameId}\n`;
+            message += `🖥️ ဆာဗာ ID: ${data.serverId}\n`;
+            message += `📦 ကုန်ပစ္စည်း: ${data.product}\n`;
+            message += `💰 စျေးနှုန်း: ${formatCurrency(data.price)} ကျပ်\n`;
+            message += `📅 ရက်စွဲ: ${data.dateTime}`;
+            
+            // Send text message first
+            const textUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+            
+            fetch(textUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    chat_id: TELEGRAM_GROUP_ID,
+                    text: message
+                })
+            })
+            .then(response => response.json())
+            .then(textData => {
+                console.log('Message sent to Telegram successfully');
+                
+                // If there's a screenshot, send it as a photo
+                if (screenshotFile) {
+                    const formData = new FormData();
+                    formData.append('chat_id', TELEGRAM_GROUP_ID);
+                    formData.append('photo', screenshotFile);
+                    formData.append('caption', `🖼️ Screenshot for Order ID: ${data.orderId}`);
+                    
+                    const photoUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`;
+                    
+                    fetch(photoUrl, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(photoData => {
+                        console.log('Photo sent to Telegram successfully');
+                    })
+                    .catch(error => {
+                        console.error('Error sending photo to Telegram:', error);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error sending message to Telegram:', error);
+            });
+        }
+        
+        // Format currency
+        function formatCurrency(amount) {
+            return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        
+        // Format date and time
+        function formatDateTime(date) {
+            const day = date.getDate();
+            const month = date.getMonth() + 1;
+            const year = date.getFullYear();
+            const hours = date.getHours();
+            const minutes = date.getMinutes();
+            
+            return `${day}.${month}.${year} ${hours}:${minutes < 10 ? '0' + minutes : minutes}`;
+        }
+        
+        // Initialize the page
+        window.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>
